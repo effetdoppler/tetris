@@ -18,6 +18,10 @@ class Application(Frame):
         self.frame.pack()
         self.grid()
 
+    def initstate(self):
+        for i in range(40):
+            self.state.append(20*[0])
+
     def grid(self):
         gap = 0
         for i in range(10):
@@ -29,19 +33,22 @@ class Application(Frame):
             self.can.create_line(0, gap, self.width, gap, fill="green")
 
     def start(self):
-        self.block = Block(self, self.can)
+        self.initstate()
+        self.block = Block(self, self.can, self.state)
 
 
 class Block(object):
-    def __init__(self, app, can):
+    def __init__(self, app, can, state):
         self.can = can
         self.app = app
+        self.state = state
         self.size = 20
+        self.pos = [0, 10]
         self.spawn()
 
     def spawn(self):
-        self.body = self.can.create_rectangle(self.app.width/2, 0, self.app.width/2+20, 20, fill="red")
-
+        self.state[self.pos[0]][self.pos[1]] = 1
+        self.body = self.can.create_rectangle(self.pos[1]*10, self.pos[0]*10, self.pos[1]*10+20, self.pos[0]*10+20, fill="red")
 
 
 if __name__ == '__main__':
