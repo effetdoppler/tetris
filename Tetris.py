@@ -1,10 +1,11 @@
 from tkinter import *
 
 
-class Application(Frame):
+class Application(Tk):
     def __init__(self, x, y):
-        Frame.__init__(self)
-        self.pack()
+        Tk.__init__(self)
+        self.frame = Frame(self)
+        self.frame.pack()
         self.width = x
         self.height = y
         self.state = []
@@ -17,6 +18,9 @@ class Application(Frame):
         self.destroybutton.pack(side=RIGHT)
         self.frame.pack()
         self.grid()
+
+    def bonjour(self, event):
+        print('bonjour')
 
     def initstate(self):
         for i in range(20): #row
@@ -36,6 +40,9 @@ class Application(Frame):
         #self.initstate()
         self.block = Block(self, self.can)
         self.block.fall()
+        self.bind("<Left>", self.block.left)
+        self.bind("<Right>", self.block.right)
+        self.can.bind("<Up>", self.bonjour)
 
 
 class Block(object):
@@ -63,6 +70,18 @@ class Block(object):
             self.app.after(200, self.fall)
         else:
             self.alive = False
+
+    def left(self, event):
+        if self.alive:
+            if self.pos[1] > 0:
+                self.pos[1] -= 1
+                self.move()
+
+    def right(self, event):
+        if self.alive:
+            if self.pos[1] < 9:
+                self.pos[1] += 1
+                self.move()
 
 
 if __name__ == '__main__':
