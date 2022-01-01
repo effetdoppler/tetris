@@ -7,10 +7,16 @@ class Application(Frame):
         self.pack()
         self.width = x
         self.height = y
+        self.state = []
         self.can = Canvas(self, width=self.width, height=self.height, bg='black', relief=SUNKEN)
         self.can.pack()
+        self.frame = Frame(self)
+        self.startbutton = Button(self.frame, text="commencer", command=self.start)
+        self.startbutton.pack(side=LEFT)
+        self.destroybutton = Button(self.frame, text="quitter", command=self.quit)
+        self.destroybutton.pack(side=RIGHT)
+        self.frame.pack()
         self.grid()
-        self.block = Block(self, self.can)
 
     def grid(self):
         gap = 0
@@ -21,6 +27,9 @@ class Application(Frame):
         for i in range(20):
             gap += 20
             self.can.create_line(0, gap, self.width, gap, fill="green")
+
+    def start(self):
+        self.block = Block(self, self.can)
 
 
 class Block(object):
