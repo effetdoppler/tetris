@@ -19,8 +19,8 @@ class Application(Frame):
         self.grid()
 
     def initstate(self):
-        for i in range(40):
-            self.state.append(20*[0])
+        for i in range(20): #row
+            self.state.append(10*[0]) #column
 
     def grid(self):
         gap = 0
@@ -33,22 +33,36 @@ class Application(Frame):
             self.can.create_line(0, gap, self.width, gap, fill="green")
 
     def start(self):
-        self.initstate()
-        self.block = Block(self, self.can, self.state)
+        #self.initstate()
+        self.block = Block(self, self.can)
+        self.block.fall()
 
 
 class Block(object):
-    def __init__(self, app, can, state):
+    def __init__(self, app, can):
         self.can = can
         self.app = app
-        self.state = state
+        #self.state = state
         self.size = 20
-        self.pos = [0, 10]
+        self.alive = True
+        self.pos = [0, 5] #[row, column]
+        self.body = None
         self.spawn()
 
     def spawn(self):
-        self.state[self.pos[0]][self.pos[1]] = 1
-        self.body = self.can.create_rectangle(self.pos[1]*10, self.pos[0]*10, self.pos[1]*10+20, self.pos[0]*10+20, fill="red")
+        #self.state[self.pos[0]][self.pos[1]] = 1
+        self.body = self.can.create_rectangle(self.pos[1]*20, self.pos[0]*20, self.pos[1]*20+self.size, self.pos[0]*20+self.size, fill="red")
+
+    def move(self):
+        self.can.coords(self.body, self.pos[1]*20, self.pos[0]*20, self.pos[1]*20+self.size, self.pos[0]*20+self.size)
+
+    def fall(self):
+        if self.pos[0] < 19:
+            self.pos[0] += 1
+            self.move()
+            self.app.after(200, self.fall)
+        else:
+            self.alive = False
 
 
 if __name__ == '__main__':
